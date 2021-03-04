@@ -58,5 +58,16 @@ pipeline {
                 }
             }
         }
+        stage("Deploy") {
+            steps {
+                ansiblePlaybook(
+                    credentialsId: 'jenkins-host-ssh-key', 
+                    inventory: 'ops/deploy/hosts', 
+                    playbook: 'ops/deploy/deploy-app.yml', 
+                    vaultCredentialsId: 'ansible-vault-secret',
+                    disableHostKeyChecking: true
+                )
+            }
+        }
     }
 }

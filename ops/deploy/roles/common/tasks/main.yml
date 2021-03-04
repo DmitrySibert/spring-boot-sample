@@ -1,0 +1,14 @@
+---
+- name: Ensure that essential packages are installed
+  yum:
+    pkg: "{{ item }}"
+    state: present
+  tags:
+    - configuration
+  loop:
+    - epel-release
+    - git
+
+- name: Install lxml
+  pip: 
+    name: lxml

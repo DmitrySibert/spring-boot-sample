@@ -1,0 +1,54 @@
+---
+- name: Download artifact
+  maven_artifact:
+    group_id: com.example
+    artifact_id: spring-boot
+    repository_url: "{{nexus_address}}/repository/maven-snapshots"
+    username: "{{vault_nexus_username}}"
+    password: "{{vault_nexus_password}}"
+    dest: "{{host_app_destination}}/{{app_file_name}}"
+    version: "{{artifact_version}}"
+    mode: '666'
+    verify_checksum: change
+
+  tags:
+    - app_deploy
+
+- name: Add spring application service config
+  template:
+    src: "{{app_name}}.service.j2"
+    dest: "/etc/systemd/system/{{app_name}}.service"
+  tags:
+    - app_deploy
+
+# - name: Start application service
+#   service:
+#     enabled: true
+#     name: "{{app_name}}"
+#     state: reloaded
+#   tags:
+#     - app_deploy
+
+- name: Add nginx app proxy configuration
+  copy:
+    src: "{{app_name}}.conf"
+    dest: "/etc/nginx/sites-available/{{app_name}}.conf"
+    mode: '666'
+  tags:
+    - app_deploy
+
+- name: Enable nginx app configuration
+  file:
+    src:  "/etc/nginx/sites-available/{{app_name}}.conf"
+    dest: "/etc/nginx/sites-enabled/{{app_name}}.conf"
+    state: link
+    mode: '666'
+  tags:
+    - app_deploy
+
+# - name: Reload nginx
+#   service:
+#     name: nginx
+#     state: reloaded
+#   tags:
+#     - app_deploy

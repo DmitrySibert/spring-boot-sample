@@ -21,13 +21,14 @@
   tags:
     - app_deploy
 
-# - name: Start application service
-#   service:
-#     enabled: true
-#     name: "{{app_name}}"
-#     state: reloaded
-#   tags:
-#     - app_deploy
+#Might be still a bug in Ansible 2.9 on Ubuntu 20.4
+- name: Start application service
+  service:
+    enabled: true
+    name: "{{app_name}}"
+    state: reloaded
+  tags:
+    - app_deploy
 
 - name: Add nginx app proxy configuration
   copy:
@@ -46,9 +47,10 @@
   tags:
     - app_deploy
 
-# - name: Reload nginx
-#   service:
-#     name: nginx
-#     state: reloaded
-#   tags:
-#     - app_deploy
+#Might be still a bug in Ansible 2.9 on Ubuntu 20.4
+- name: Reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  tags:
+    - app_deploy

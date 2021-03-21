@@ -1,0 +1,6 @@
+---
+- name: deploy application
+  hosts: metrics_host
+  remote_user: root
+  roles:
+    - role: prometheus_node_exporter

@@ -54,3 +54,4 @@ These Users can be used for an access to Nexus by Jenkins and Ansible agents
 #### Notes
 
 - In Pipeline curl might be used insted of Nexus plugin for uploading artifacts to Nexus
+- To give index.html access restorecon -r -v index.html

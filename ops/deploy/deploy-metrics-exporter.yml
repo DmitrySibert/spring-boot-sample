@@ -1,6 +1,9 @@
 ---
 - name: deploy application
-  hosts: metrics_host
-  remote_user: root
+  hosts: observable_host, metrics_host
+  vars_files:
+    - group_vars/otus_metrics.yml
+  remote_user: irina
+  become: true
   roles:
     - role: prometheus_node_exporter

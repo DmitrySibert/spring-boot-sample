@@ -1,0 +1,13 @@
+[Unit]
+Description=Heartbeat
+Documentation=https://www.elastic.co/guide/en/beats/heartbeat/current/index.html
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User={{ target_user }}
+ExecStart={{ heartbeat_remote_dest }}/{{ heartbeat_name }}/heartbeat -c {{ heartbeat_remote_dest }}/{{ heartbeat_name }}/heartbeat.yml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

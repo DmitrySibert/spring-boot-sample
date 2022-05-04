@@ -1,0 +1,5 @@
+#by some reason it is nginx exporter name
+app_file_name: nginx-prometheus-exporter
+host_app_destination: /home/irina/Documents/Irina/nginx-exporter
+otus_metrics_file_name: otus-metrics.jar
+otus_metrics_host_destination: /home/irina/Documents/Irina/otus-exporter

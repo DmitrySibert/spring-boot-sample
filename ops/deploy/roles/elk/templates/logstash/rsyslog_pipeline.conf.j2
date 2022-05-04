@@ -1,0 +1,14 @@
+input {
+  udp {
+    port => 10514
+    codec => "json"
+    type => "rsyslog"
+  }
+}
+
+output {
+    elasticsearch {
+      hosts => ["http://localhost:9200"]
+      index => "%{[event_producer]}-%{+YYYY.MM.dd}"
+    }
+}

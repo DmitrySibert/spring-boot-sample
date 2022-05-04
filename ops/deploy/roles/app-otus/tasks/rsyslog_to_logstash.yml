@@ -1,0 +1,17 @@
+- name: Send template conf
+  template:
+    src: "logs/rsyslog/01-json-template.conf.j2"
+    dest: "/etc/rsyslog.d/01-json-template.conf"
+    mode: '644'
+
+- name: Send output rule
+  template:
+    src: "logs/rsyslog/70-output.conf.j2"
+    dest: "/etc/rsyslog.d/70-output.conf"
+    mode: '644'
+
+- name: Restart rsyslog service
+  service:
+    daemon_reload: yes
+    name: "rsyslog"
+    state: started

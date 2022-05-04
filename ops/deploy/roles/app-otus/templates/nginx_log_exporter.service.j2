@@ -1,0 +1,15 @@
+[Unit]
+Description=Nginx Log exporter
+
+[Service]
+User={{ target_user }}
+Group={{ target_group }}
+Type=simple
+ExecStart={{host_app_destination}}/prometheus-nginxlog-exporter -config-file {{host_app_destination}}/nginxlog_exporter.yml
+SuccessExitStatus=143
+TimeoutStopSec=15
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

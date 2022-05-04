@@ -1,0 +1,13 @@
+[Unit]
+Description=Otus metrics Service
+
+[Service]
+User=nobody
+ExecStart=/opt/jdk1.8.0_181/bin/java -Xmx256m -jar {{otus_metrics_host_destination}}/{{otus_metrics_file_name}}
+SuccessExitStatus=143
+TimeoutStopSec=15
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

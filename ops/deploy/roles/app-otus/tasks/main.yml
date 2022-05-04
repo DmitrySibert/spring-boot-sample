@@ -1,0 +1,115 @@
+---
+#Otus exporter section
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: /home/dmitrii/Projects/spring-boot-sample/ops/artifactory/otus-metrics.jar
+    dest: /home/irina/Documents/Irina/otus-exporter/otus-metrics.jar
+    owner: irina
+    group: irina
+    mode: '775'
+
+- name: Add otus_exporter service config
+  template:
+    src: "otus_exporter.service.j2"
+    dest: "/etc/systemd/system/otus_exporter.service"
+  tags:
+    - app_deploy
+
+#- name: Start otus_exporter service
+#  service:
+#    enabled: true
+#    name: "otus_exporter"
+#    state: reloaded
+#  tags:
+#    - app_deploy
+
+
+#Nginx log exporter section
+- name: Copy file with owner and permissions nginx_log_exporter
+  ansible.builtin.copy:
+    src: /home/dmitrii/Projects/spring-boot-sample/ops/artifactory/prometheus-nginxlog-exporter
+    dest: /home/irina/Documents/Irina/nginx-exporter/prometheus-nginxlog-exporter
+    owner: irina
+    group: irina
+    mode: '775'
+
+- name: Copy file with owner and permissions nginx_log_exporter
+  ansible.builtin.copy:
+    src: /home/dmitrii/Projects/spring-boot-sample/ops/artifactory/nginxlog_exporter.yml
+    dest: /home/irina/Documents/Irina/nginx-exporter/nginxlog_exporter.yml
+    owner: irina
+    group: irina
+    mode: '666'
+
+- name: Add nginx_log_exporter service config
+  template:
+    src: "nginx_log_exporter.service.j2"
+    dest: "/etc/systemd/system/nginx_log_exporter.service"
+  tags:
+    - app_deploy
+
+#- name: Start nginx_log_exporter service
+#  service:
+#    enabled: true
+#    name: "nginx_log_exporter"
+#    state: reloaded
+#  tags:
+#    - app_deploy
+
+#Nginx exporter section
+#- name: Copy file with owner and permissions
+#  ansible.builtin.copy:
+#    src: /home/dmitrii/Projects/spring-boot-sample/ops/artifactory/nginx-prometheus-exporter
+#    dest: /home/irina/Documents/Irina/nginx-exporter/nginx-prometheus-exporter
+#    owner: irina
+#    group: irina
+#    mode: '775'
+
+- name: Add nginx_exporter service config
+  template:
+    src: "nginx_exporter.service.j2"
+    dest: "/etc/systemd/system/nginx_exporter.service"
+  tags:
+    - app_deploy
+
+#- name: Start nginx_exporter service
+#  service:
+#    enabled: true
+#    name: "nginx_exporter"
+#    state: reloaded
+#  tags:
+#    - app_deploy
+
+#Application nginx setup
+- name: Add nginx app proxy configuration
+  copy:
+    src: "{{app_name}}.conf"
+    dest: "/etc/nginx/sites-available/{{app_name}}.conf"
+    mode: '666'
+  tags:
+    - app_deploy
+
+- name: Enable nginx app configuration
+  file:
+    src:  "/etc/nginx/sites-available/{{app_name}}.conf"
+    dest: "/etc/nginx/sites-enabled/{{app_name}}.conf"
+    state: link
+    mode: '666'
+  tags:
+    - app_deploy
+
+- name: Reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  tags:
+    - app_deploy
+
+- name: Metricbeat plays
+  include: metricbeat.yml
+
+- name: Config rsyslog to send logs to logstash
+  include: rsyslog_to_logstash.yml
+
+- name: Config filebeat
+  include: filebeat.yml

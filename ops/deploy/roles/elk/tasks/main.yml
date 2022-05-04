@@ -1,0 +1,14 @@
+- name: Install Java
+  include: common/java.yml
+
+- name: Install Elastic search
+  include: elk/elastic_search.yml
+
+- name: Install Logstash
+  include: elk/logstash.yml
+
+- name: Install Kibana
+  include: elk/kibana.yml
+
+- name: Install Heartbeat
+  include: elk/beats/heartbeat.yml

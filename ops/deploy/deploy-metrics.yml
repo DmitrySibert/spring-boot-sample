@@ -1,6 +1,8 @@
 ---
 - name: deploy application
   hosts: metrics_host
-  remote_user: root
+  remote_user: irina
+  become: yes
   roles:
     - role: prometheus
+#    - role: grafana

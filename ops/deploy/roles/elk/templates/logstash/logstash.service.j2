@@ -1,0 +1,12 @@
+[Unit]
+Description=Logstash service
+
+[Service]
+EnvironmentFile=/etc/environment
+User=user
+Group=user
+Type=simple
+ExecStart={{logstash_remote_dest}}/{{ logstash_name }}/bin/logstash -f {{logstash_remote_dest}}/{{ logstash_name }}/config/logstash.conf
+
+[Install]
+WantedBy=multi-user.target

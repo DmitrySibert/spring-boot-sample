@@ -1,5 +1,8 @@
 app_name: spring_app
-app_file_name: spring-boot.jar
-host_app_destination: /usr/share/java
+app_file_name: nginx-prometheus-exporter
+host_app_destination: /home/irina/Documents/Irina/nginx-exporter
 artifact_version: 0.0.1-SNAPSHOT
 nexus_address: http://192.168.56.103:8081
+
+otus_metrics_file_name: otus-metrics.jar
+otus_metrics_host_destination: /home/irina/Documents/Irina/otus-exporter

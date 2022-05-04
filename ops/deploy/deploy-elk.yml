@@ -1,0 +1,7 @@
+---
+- name: deploy elk
+  hosts: elk_host
+  remote_user: user
+  become: yes
+  roles:
+    - role: elk

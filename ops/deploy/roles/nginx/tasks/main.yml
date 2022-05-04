@@ -1,6 +1,6 @@
 ---
 - name: Ensure that nginx is installed
-  yum:
+  apt:
     pkg: nginx
     state: present
   tags:

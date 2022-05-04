@@ -1,6 +1,7 @@
 ---
 - name: deploy application
-  hosts: metrics_host
-  remote_user: root
+  hosts: observable_host, metrics_host
+  remote_user: irina
+  become: true
   roles:
     - role: prometheus_node_exporter

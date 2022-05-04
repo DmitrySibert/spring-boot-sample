@@ -1,0 +1,7 @@
+elastic_remote_dest: "/opt/elastic"
+elastic_name: "elasticsearch-7.17.1"
+
+java_home: "/usr/lib/jvm"
+
+logstash_remote_dest: "/opt/elastic"
+logstash_name: "logstash-7.17.1"

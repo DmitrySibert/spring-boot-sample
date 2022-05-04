@@ -1,0 +1,53 @@
+- name: Create target directory
+  file:
+    path: "{{ metricbeat_remote_dest }}/src/"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '775'
+
+- name: Send metricbeat binary
+  copy:
+    src: "/home/dmitrii/Projects/spring-boot-sample/ops/artifactory/{{ metricbeat_name }}.tar.gz"
+    dest: "{{ metricbeat_remote_dest }}/src/{{ metricbeat_name }}.tar.gz"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '775'
+
+- name: Unpack metricbeat binary
+  unarchive:
+    src: "{{ metricbeat_remote_dest }}/src/{{ metricbeat_name }}.tar.gz"
+    dest: "{{ metricbeat_remote_dest }}"
+    creates: "{{ metricbeat_remote_dest }}/{{ metricbeat_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '751'
+    remote_src: yes
+
+- name: Fix permissions on the extract directory and sub-directories
+  file:
+    path: "{{ metricbeat_remote_dest }}/{{ metricbeat_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '751'
+    recurse: yes
+
+- name: Send metricbeat configurations
+  template:
+    src: "beats/metricbeat/metricbeat.yml.j2"
+    dest: "{{ metricbeat_remote_dest }}/{{ metricbeat_name }}/metricbeat.yml"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '751'
+
+- name: Add metricbeat service config
+  template:
+    src: "beats/metricbeat/metricbeat.service.j2"
+    dest: "/etc/systemd/system/metricbeat.service"
+
+- name: Start metricbeat service
+  service:
+    enabled: true
+    daemon_reload: yes
+    name: "metricbeat"
+    state: started

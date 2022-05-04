@@ -1,0 +1,7 @@
+metricbeat_remote_dest: "/opt/beats"
+metricbeat_name: "metricbeat-7.17.1-linux-x86_64"
+
+target_user: irina
+target_group: irina
+
+logstash_host: "192.168.56.101"

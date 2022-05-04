@@ -1,0 +1,13 @@
+[Unit]
+Description=Nginx metrics exporter
+
+[Service]
+User=nobody
+ExecStart={{host_app_destination}}/{{app_file_name}} -nginx.scrape-uri=http://localhost:81/basic_status
+SuccessExitStatus=143
+TimeoutStopSec=15
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

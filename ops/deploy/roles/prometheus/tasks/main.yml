@@ -147,6 +147,28 @@
 
 
 #Configuration
+#- name: configure prometheus rule1
+#  copy:
+#    src: "rule1.rules"
+#    dest: "{{ prometheus_config_dir }}/rules/rule1.rules"
+#    force: true
+#    owner: root
+#    group: prometheus
+#    mode: 0640
+
+- name: copy custom alerting rule files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ prometheus_config_dir }}/rules/"
+    owner: root
+    group: prometheus
+    mode: 0640
+    validate: "{{ _prometheus_binary_install_dir }}/promtool check rules %s"
+  with_fileglob:
+    - rules/*.rules
+  notify:
+    - reload prometheus
+
 - name: configure prometheus
   copy:
     src: "{{ prometheus_config_file }}"
@@ -167,3 +189,32 @@
     owner: root
     group: prometheus
     mode: 0640
+
+
+#Alert manager section
+- name: Copy file with owner and permissions prometheus_alert_manager
+  ansible.builtin.copy:
+    src: /home/dmitrii/Projects/spring-boot-sample/ops/artifactory/alertmanager
+    dest: /opt/alertmanager/alertmanager
+    owner: irina
+    group: irina
+    mode: '775'
+
+- name: Copy file with owner and permissions prometheus_alert_manager
+  ansible.builtin.copy:
+    src: /home/dmitrii/Projects/spring-boot-sample/ops/artifactory/alertmanager.yml
+    dest: /opt/alertmanager/alertmanager.yml
+    owner: irina
+    group: irina
+    mode: '666'
+
+- name: Add prometheus_alert_manager service config
+  template:
+    src: "prometheus_alert_manager.service.j2"
+    dest: "/etc/systemd/system/prometheus_alert_manager.service"
+
+- name: Start prometheus_alert_manager service
+  service:
+    enabled: true
+    name: "prometheus_alert_manager"
+    state: reloaded

@@ -1,10 +1,13 @@
 ---
 - name: deploy application
-  hosts: development
-  remote_user: root
+  hosts: observable_host
   vars_files:
-    - vault.yml
+    - group_vars/otus_metrics.yml
+  remote_user: irina
+  become: yes
+#  vars_files:
+#    - vault.yml
   roles:
     - role: common
-    - role: nginx
-    - role: app
+    - role: nginx-deb
+    - role: app-otus

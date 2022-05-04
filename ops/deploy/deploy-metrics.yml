@@ -1,6 +1,10 @@
 ---
 - name: deploy application
   hosts: metrics_host
-  remote_user: root
+  vars_files:
+    - group_vars/otus_metrics.yml
+  remote_user: irina
+  become: yes
   roles:
     - role: prometheus
+#    - role: grafana

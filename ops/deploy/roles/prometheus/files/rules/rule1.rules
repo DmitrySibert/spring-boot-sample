@@ -1,0 +1,10 @@
+groups:
+- name: example
+  rules:
+  - alert: HighRequestLatency
+    expr: max_over_time(otus_http_response_time_seconds{job="nginx_log_exporter",quantile="0.99"}[10m]) > 0.005
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: High request latency

@@ -14,21 +14,6 @@
   tags:
     - app_deploy
 
-- name: create alt system group
-  group:
-    name: alt
-    system: true
-    state: present
-
-- name: create alt system user
-  user:
-    name: alt
-    system: true
-    shell: "/usr/sbin/nologin"
-    group: alt
-    createhome: false
-    home: "{{ nginx_dir }}"
-
 - name: Add spring application service config
   template:
     src: "{{app_name}}.service.j2"

@@ -1,0 +1,9 @@
+---
+- name: deploy elk
+  hosts: elk_host
+  vars_files:
+    - group_vars/otus_metrics.yml
+  remote_user: user
+  become: yes
+  roles:
+    - role: elk

@@ -1,0 +1,22 @@
+- name: Send java binary
+  copy:
+    src: "/home/dmitrii/Projects/spring-boot-sample/ops/artifactory/openjdk-14.0.2.tar.gz"
+    dest: "{{ java_home }}/openjdk-14.0.2.tar.gz"
+    mode: '666'
+
+- name: Unpack java binary
+  become: true
+  unarchive:
+    src: "{{ java_home }}/openjdk-14.0.2.tar.gz"
+    dest: "{{ java_home }}/"
+    creates: "{{ java_home }}/openjdk-14.0.2"
+    mode: 0755
+    remote_src: yes
+
+- name: Set JAVA_HOME
+  become: yes
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: '^JAVA_HOME'
+    line: 'JAVA_HOME={{ java_home }}/jdk-14.0.2'

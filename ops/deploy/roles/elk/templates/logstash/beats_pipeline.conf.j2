@@ -1,0 +1,12 @@
+input {
+  pipeline {
+    address => beats_pipeline
+  }
+}
+
+output {
+    elasticsearch {
+      hosts => ["http://localhost:9200"]
+      index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+    }
+}

@@ -5,7 +5,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-User=irina
+User={{ target_user }}
 ExecStart={{ metricbeat_remote_dest }}/{{ metricbeat_name }}/metricbeat -c {{metricbeat_remote_dest}}/{{ metricbeat_name }}/metricbeat.yml
 Restart=always
 

@@ -50,8 +50,16 @@
 
 - name: Send logstash pipeline configurations
   template:
-    src: "logstash/logstash.conf.j2"
-    dest: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/logstash.conf"
+    src: "logstash/pipelines.yml.j2"
+    dest: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/pipelines.yml"
+    owner: user
+    group: user
+    mode: '775'
+
+- name: Send logstash beats pipeline configurations
+  template:
+    src: "logstash/beats_pipeline.conf.j2"
+    dest: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/beats_pipeline.conf"
     owner: user
     group: user
     mode: '775'

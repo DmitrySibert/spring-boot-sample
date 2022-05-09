@@ -1,11 +1,25 @@
 input {
   beats {
     port => 5044
+    type => "beat"
+  }
+  udp {
+    port => 10514
+    codec => "json"
+    type => "rsyslog"
   }
 }
+
 output {
-  elasticsearch {
-    hosts => ["http://localhost:9200"]
-    index => "%{[@metadata][beat]}-%{[@metadata][version]}"
+  if [type] == "rsyslog" {
+    elasticsearch {
+      hosts => ["http://localhost:9200"]
+      index => "%{[event_producer]}-%{+YYYY.MM.dd}"
+    }
+  }
+  if [type] == "beat" {
+    pipeline {
+        send_to => beats_pipeline
+    }
   }
 }

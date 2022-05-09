@@ -2,8 +2,8 @@
 Description=Nginx Log exporter
 
 [Service]
-User=irina
-Group=irina
+User={{ target_user }}
+Group={{ target_group }}
 Type=simple
 ExecStart={{host_app_destination}}/prometheus-nginxlog-exporter -config-file {{host_app_destination}}/nginxlog_exporter.yml
 SuccessExitStatus=143

@@ -107,3 +107,9 @@
 
 - name: Metricbeat plays
   include: metricbeat.yml
+
+- name: Config rsyslog to send logs to logstash
+  include: rsyslog_to_logstash.yml
+
+- name: Config filebeat
+  include: filebeat.yml

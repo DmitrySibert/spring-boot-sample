@@ -1,0 +1,4 @@
+# This line sends all lines to defined IP address at port {{ logstash_rsyslog_port }}
+# using the {{ rsyslog_json_template_name }} format.
+
+auth,authpriv.*   @{{ logstash_host }}:{{ logstash_rsyslog_port }};{{ rsyslog_json_template_name }}

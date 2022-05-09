@@ -11,3 +11,6 @@ logstash_name: "logstash-7.17.1"
 
 kibana_remote_dest: "/opt/kibana"
 kibana_name: "kibana-7.17.3-linux-x86_64"
+
+heartbeat_remote_dest: "/opt/beats"
+heartbeat_name: "heartbeat-7.17.3-linux-x86_64"

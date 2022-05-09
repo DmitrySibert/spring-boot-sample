@@ -4,7 +4,7 @@
     state: directory
     owner: user
     group: user
-    mode: '766'
+    mode: '666'
 
 - name: Send logstash binary
   copy:
@@ -12,7 +12,7 @@
     dest: "{{ logstash_remote_dest }}/src/{{ logstash_name }}.tar.gz"
     owner: user
     group: user
-    mode: '766'
+    mode: '666'
 
 - name: Unpack logstash binary
   unarchive:
@@ -21,7 +21,7 @@
     creates: "{{ logstash_remote_dest }}/{{ logstash_name }}"
     owner: user
     group: user
-    mode: '766'
+    mode: '666'
     remote_src: yes
 
 - name: Set LS_JAVA_HOME
@@ -46,7 +46,7 @@
     dest: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/logstash.yml"
     owner: user
     group: user
-    mode: '775'
+    mode: '666'
 
 - name: Send logstash pipeline configurations
   template:
@@ -54,7 +54,7 @@
     dest: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/pipelines.yml"
     owner: user
     group: user
-    mode: '775'
+    mode: '666'
 
 - name: Send logstash beats pipeline configurations
   template:
@@ -62,7 +62,15 @@
     dest: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/beats_pipeline.conf"
     owner: user
     group: user
-    mode: '775'
+    mode: '666'
+
+- name: Send logstash rsyslog pipeline configurations
+  template:
+    src: "logstash/rsyslog_pipeline.conf.j2"
+    dest: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/rsyslog_pipeline.conf"
+    owner: user
+    group: user
+    mode: '666'
 
 - name: Add logstash service config
   template:

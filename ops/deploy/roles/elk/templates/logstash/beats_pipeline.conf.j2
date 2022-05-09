@@ -1,6 +1,7 @@
 input {
-  pipeline {
-    address => beats_pipeline
+  beats {
+    port => 5044
+    type => "beat"
   }
 }
 

@@ -16,6 +16,8 @@
 
 - pipeline.id: beats_pipeline
   path.config: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/beats_pipeline.conf"
+- pipeline.id: rsyslog_pipeline
+  path.config: "{{ logstash_remote_dest }}/{{ logstash_name }}/config/rsyslog_pipeline.conf"
 #
 # Available options:
 #

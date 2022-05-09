@@ -1,0 +1,53 @@
+- name: Create target directory
+  file:
+    path: "{{ heartbeat_remote_dest }}/src/"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+
+- name: Send heartbeat binary
+  copy:
+    src: "/home/dmitrii/Projects/spring-boot-sample/ops/artifactory/{{ heartbeat_name }}.tar.gz"
+    dest: "{{ heartbeat_remote_dest }}/src/{{ heartbeat_name }}.tar.gz"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+
+- name: Unpack heartbeat binary
+  unarchive:
+    src: "{{ heartbeat_remote_dest }}/src/{{ heartbeat_name }}.tar.gz"
+    dest: "{{ heartbeat_remote_dest }}"
+    creates: "{{ heartbeat_remote_dest }}/{{ heartbeat_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+    remote_src: yes
+
+- name: Fix permissions on the extract directory and sub-directories
+  file:
+    path: "{{ heartbeat_remote_dest }}/{{ heartbeat_name }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+    recurse: yes
+
+- name: Send heartbeat configurations
+  template:
+    src: "beats/heartbeat/heartbeat.yml.j2"
+    dest: "{{ heartbeat_remote_dest }}/{{ heartbeat_name }}/heartbeat.yml"
+    owner: "{{ target_user }}"
+    group: "{{ target_group }}"
+    mode: '711'
+
+- name: Add heartbeat service config
+  template:
+    src: "beats/heartbeat/heartbeat.service.j2"
+    dest: "/etc/systemd/system/heartbeat.service"
+
+- name: Start heartbeat service
+  service:
+    enabled: true
+    daemon_reload: yes
+    name: "heartbeat"
+    state: started

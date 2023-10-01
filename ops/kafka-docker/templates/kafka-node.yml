@@ -1,0 +1,24 @@
+version: '2'
+services:
+  {{ kafka_node_name }}:
+    image: confluentinc/cp-kafka:latest
+    restart: always
+    ports:
+      - 9092:9092
+      - 9093:9093
+      - 9101:9101
+    environment:
+      KAFKA_BROKER_ID: {{ kafka_broker_id}}
+      KAFKA_ZOOKEEPER_CONNECT: {{ kafka_zookeeper_hosts }}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://{{ kafka_adv_listener_external }}:9093,PLAINTEXT_HOST://{{ kafka_adv_listener_external }}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: {{ kafka_adv_listener_external }}
+      KAFKA_JMX_OPTS: -Djava.rmi.server.hostname={{ kafka_adv_listener_external }}
+                      -Dcom.sun.management.jmxremote.rmi.port={{ kafka_adv_listener_external }} |
+                      -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  |
+                      -Dcom.sun.management.jmxremote.ssl=false |
+                      -Djava.net.preferIPv4Stack=true |
+                      -Dcom.sun.management.jmxremote.local.only=false

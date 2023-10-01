@@ -1,0 +1,65 @@
+---
+- hosts: stage1
+  vars:
+    zookeeper_server_id: 1
+    zookeeper_servers: "0.0.0.0:2888:3888;192.168.1.111:2888:3888"
+    kafka_broker_id: 0
+    kafka_zookeeper_hosts: "192.168.1.110:2181,192.168.1.111:2181"
+    kafka_adv_listener_external: "192.168.1.110"
+    kafdrop_kafka_servers: "192.168.1.110:9092,192.168.1.111:9092"
+    kafka_node_name: "kafka-1"
+  user: "{{ user }}"
+  become: true
+  tasks:
+  - name: Create directory
+    file:
+      path: /home/headvm/kafka
+      state: directory
+
+  - name: copy zookeeper comspose stage1
+    template:
+      src: zookeper-node.yml
+      dest: /home/headvm/kafka/zookeper-node.yml
+
+  - name: copy kafka comspose stage1
+    template:
+      src: kafka-node.yml
+      dest: /home/headvm/kafka/kafka-node.yml
+
+  - name: copy kafdrop comspose stage1
+    template:
+      src: kafdrop.yml
+      dest: /home/headvm/kafka/kafdrop.yml
+
+
+- hosts: stage2
+  vars:
+    zookeeper_server_id: 2
+    zookeeper_servers: "192.168.1.110:2888:3888;0.0.0.0:2888:3888"
+    kafka_broker_id: 2
+    kafka_zookeeper_hosts: "192.168.1.110:2181,192.168.1.111:2181"
+    kafka_adv_listener_external: "192.168.1.111"
+    kafdrop_kafka_servers: "192.168.1.110:9092,192.168.1.111:9092"
+    kafka_node_name: "kafka-2"
+  user: "{{ user }}"
+  become: true
+  tasks:
+    - name: Create directory
+      file:
+        path: /home/headvm/kafka
+        state: directory
+
+    - name: copy zookeeper comspose stage2
+      template:
+        src: zookeper-node.yml
+        dest: /home/headvm/kafka/zookeper-node.yml
+
+    - name: copy kafka comspose stage2
+      template:
+        src: kafka-node.yml
+        dest: /home/headvm/kafka/kafka-node.yml
+
+#https://www.baeldung.com/ops/kafka-docker-setup
+#https://docs.confluent.io/platform/current/kafka/multi-node.html
+#https://codersee.com/how-to-deploy-multiple-kafka-brokers-with-docker-compose/
+#https://github.com/confluentinc/kafka-images/issues/65

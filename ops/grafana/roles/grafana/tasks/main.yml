@@ -1,0 +1,36 @@
+---
+- name: Update apt and install apt-transport-https
+  apt:
+    name: apt-transport-https
+    state: latest
+    update_cache: true
+
+- name: Update apt and install software-properties-common
+  apt:
+    name: software-properties-common
+    state: latest
+    update_cache: true
+
+- name: Create keyrings directory
+  file:
+    path: "{{ keyrings_path }}"
+    state: directory
+    mode: 0644
+
+#can't use because of the sanctions
+- name: Add Grafana GPG key
+  get_url:
+    url: "{{ grafana_repo_url }}/gpg.key"
+    dest: "{{ keyrings_path }}/{{ grafana_gpg_name }}"
+    mode: 0644
+    force: true
+
+- name: Add Grafana repo
+  apt_repository:
+    repo: "deb [signed-by={{ keyrings_path }}/{{ grafana_gpg_name }}] {{ grafana_repo_url }} stable main"
+
+- name: Update apt and install grafana
+  apt:
+    name: grafana
+    state: latest
+    update_cache: true

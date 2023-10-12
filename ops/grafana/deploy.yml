@@ -1,0 +1,6 @@
+---
+- hosts: stage
+  user: "{{ user }}"
+  become: true
+  roles:
+    - grafana

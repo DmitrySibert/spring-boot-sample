@@ -7,4 +7,3 @@
   become: yes
   roles:
     - role: prometheus
-#    - role: grafana

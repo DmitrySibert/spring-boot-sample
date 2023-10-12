@@ -1,0 +1,4 @@
+user: root
+keyrings_path: /etc/apt/keyrings
+grafana_repo_url: https://apt.grafana.com
+grafana_gpg_name: grafana.gpg

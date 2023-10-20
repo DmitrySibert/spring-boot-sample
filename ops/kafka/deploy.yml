@@ -1,0 +1,20 @@
+---
+- hosts: stage1
+  user: "{{ user }}"
+  become: true
+  roles:
+    - common
+    - exporter
+    - kafka
+
+- hosts: stage2
+  user: "{{ user }}"
+  become: true
+  roles:
+    - common
+    - exporter
+    - kafka
+
+# https://www.digitalocean.com/community/tutorials/how-to-install-apache-kafka-on-ubuntu-20-04
+# https://stackoverflow.com/questions/36708384/how-to-enable-remote-jmx-on-kafka-brokers-for-jmxtool
+# https://stackoverflow.com/questions/36708384/how-to-enable-remote-jmx-on-kafka-brokers-for-jmxtool

@@ -3,3 +3,4 @@ app_file_name: spring-boot.jar
 host_app_destination: /usr/share/java
 artifact_version: 0.0.1-SNAPSHOT
 nexus_address: http://192.168.100.4:8081
+alert_manager: false

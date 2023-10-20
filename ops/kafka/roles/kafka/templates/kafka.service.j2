@@ -1,0 +1,14 @@
+[Unit]
+Requires=zookeeper.service
+After=zookeeper.service
+
+[Service]
+Environment=JAVA_HOME={{ java_home }}/jdk-18
+Type=simple
+User={{ kafka_user }}
+ExecStart=/bin/sh -c '{{ kafka_home }}/{{ kafka_arch_name }}-{{ kafka_ver }}/bin/kafka-server-start.sh {{ kafka_home }}/{{ kafka_arch_name }}-{{ kafka_ver }}/config/server.properties > {{ kafka_home }}/log/kafka.log 2>&1'
+ExecStop={{ kafka_home }}/{{ kafka_arch_name }}-{{ kafka_ver }}/bin/kafka-server-stop.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

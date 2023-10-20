@@ -1,0 +1,28 @@
+java_home: "/usr/lib/jvm"
+user: root
+kafka_user: kafka
+kafka_home: '/home/kafka'
+kafka_ver: 3.6.0
+kafka_arch_name: kafka_2.13
+_kafka_binary_install_dir: "{{ kafka_home }}"
+get_kafka_url: "https://dlcdn.apache.org/kafka/{{ kafka_ver }}/{{ kafka_arch_name }}-{{ kafka_ver }}.tgz"
+get_java_url: "https://download.java.net/openjdk/jdk18/ri/openjdk-18+36_linux-x64_bin.tar.gz"
+get_jmx_prometheus_javaagent_url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.20.0/jmx_prometheus_javaagent-0.20.0.jar"
+
+install: false
+
+kafka_broker_listeners: PLAINTEXT://:9092
+kafka_broker_advertises_listeners: "PLAINTEXT://{{ kafka_broker_host }}:9092"
+kafka_jmx_port: 9101
+kafka_jmx_opts: -Djava.rmi.server.hostname={{ kafka_broker_host }} |
+  -Dcom.sun.management.jmxremote=true |
+  -Dcom.sun.management.jmxremote.authenticate=false  |
+  -Dcom.sun.management.jmxremote.ssl=false |
+  -Djava.net.preferIPv4Stack=true |
+  -Dcom.sun.management.jmxremote.local.only=false
+kafka_opts: "-javaagent:{{ kafka_home }}/jmx_prometheus_javaagent-0.20.0.jar=7071:{{ kafka_home }}/metrics.yml"
+
+zookeeper_jmx_port: 9102
+
+zookeeper_data_dir: "{{ kafka_home }}/zookeeper"
+

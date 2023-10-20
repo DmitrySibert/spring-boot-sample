@@ -3,7 +3,7 @@
   hosts: metrics_host
   vars_files:
     - group_vars/otus_metrics.yml
-  remote_user: irina
+  remote_user: root
   become: yes
   roles:
     - role: prometheus

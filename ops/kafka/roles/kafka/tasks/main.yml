@@ -1,0 +1,116 @@
+---
+- name: download kafka binary to local folder
+  become: false
+  get_url:
+    url: "{{ get_kafka_url }}"
+    dest: "/tmp/kafka-{{ kafka_ver }}.tar.gz"
+  register: _download_archive
+  until: _download_archive is succeeded
+  retries: 5
+  delay: 2
+  delegate_to: localhost
+  check_mode: false
+  when: "{{ install }}"
+
+- name: unpack kafka binaries
+  become: false
+  unarchive:
+    src: "/tmp/kafka-{{ kafka_ver }}.tar.gz"
+    dest: "/tmp"
+  delegate_to: localhost
+  check_mode: false
+  register: unpack_bin
+  when: "{{ install }}"
+
+- name: propagate kafka binaries
+  copy:
+    src: "/tmp/{{ kafka_arch_name }}-{{ kafka_ver }}"
+    dest: "{{ _kafka_binary_install_dir }}"
+    mode: 0744
+    owner: kafka
+    group: kafka
+  when: "{{ install }}"
+
+- name: create kafka logs directory
+  file:
+    path: "{{ kafka_home }}/log"
+    state: directory
+    owner: "{{ kafka_user }}"
+    group: kafka
+    mode: 0744
+
+- name: Add kafka server service config
+  template:
+    src: "properties/server.properties.j2"
+    dest: "{{ kafka_home }}/{{ kafka_arch_name }}-{{ kafka_ver }}/config/server.properties"
+  notify:
+    - restart kafka
+
+- name: Add kafka zookeper service config
+  template:
+    src: "properties/zookeeper.properties.j2"
+    dest: "{{ kafka_home }}/{{ kafka_arch_name }}-{{ kafka_ver }}/config/zookeeper.properties"
+  notify:
+    - restart zookeeper
+
+- name: Add kafka server start sh
+  template:
+    src: "properties/kafka-server-start.sh.j2"
+    dest: "{{ kafka_home }}/{{ kafka_arch_name }}-{{ kafka_ver }}/bin/kafka-server-start.sh"
+  notify:
+    - restart kafka
+
+- name: Add zookeeper server start sh
+  template:
+    src: "properties/zookeeper-server-start.sh.j2"
+    dest: "{{ kafka_home }}/{{ kafka_arch_name }}-{{ kafka_ver }}/bin/zookeeper-server-start.sh"
+  notify:
+    - restart zookeeper
+
+- name: Add zookeeper data directory
+  file:
+    path: "{{ zookeeper_data_dir }}"
+    state: directory
+    mode: 0744
+    owner: kafka
+    group: kafka
+
+- name: Add zookeeper myid file
+  copy:
+    content: "{{ zookeeper_node_id }}"
+    dest: "{{ zookeeper_data_dir }}/myid"
+    mode: 0744
+    owner: kafka
+    group: kafka
+
+- name: create zookeeper systemd service unit
+  template:
+    src: zookeeper.service.j2
+    dest: /etc/systemd/system/zookeeper.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart zookeeper
+
+- name: enable zookeeper
+  become: true
+  systemd:
+    name: zookeeper
+    enabled: true
+
+- name: create kafka systemd service unit
+  template:
+    src: kafka.service.j2
+    dest: /etc/systemd/system/kafka.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart kafka
+
+- name: enable kafka
+  become: true
+  systemd:
+    name: kafka
+    enabled: true

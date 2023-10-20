@@ -144,8 +144,6 @@
     - ansible_version.full is version('2.4', '>=')
     - ansible_selinux.status == "enabled"
 
-
-
 #Configuration
 #- name: configure prometheus rule1
 #  copy:
@@ -199,6 +197,7 @@
     owner: irina
     group: irina
     mode: '775'
+  when: alert_manager
 
 - name: Copy file with owner and permissions prometheus_alert_manager
   ansible.builtin.copy:
@@ -207,14 +206,17 @@
     owner: irina
     group: irina
     mode: '666'
+  when: alert_manager
 
 - name: Add prometheus_alert_manager service config
   template:
     src: "prometheus_alert_manager.service.j2"
     dest: "/etc/systemd/system/prometheus_alert_manager.service"
+  when: alert_manager
 
 - name: Start prometheus_alert_manager service
   service:
     enabled: true
     name: "prometheus_alert_manager"
     state: reloaded
+  when: alert_manager

@@ -1,0 +1,18 @@
+---
+- name: download jmx_prometheus_javaagent
+  get_url:
+    url: "{{ get_jmx_prometheus_javaagent_url }}"
+    dest: "{{ kafka_home }}"
+    mode: 0744
+    owner: kafka
+    group: kafka
+
+- name: upload metrics settings
+  copy:
+    src: "metrics.yml"
+    dest: "{{ kafka_home }}/metrics.yml"
+    mode: 0744
+    owner: kafka
+    group: kafka
+
+#https://nulpointerexception.com/2023/02/05/tutorial-for-kafka-monitoring-using-jmx-prometheus-and-grafana/

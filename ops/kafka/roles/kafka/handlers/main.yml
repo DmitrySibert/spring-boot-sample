@@ -1,0 +1,26 @@
+---
+- name: restart zookeeper
+  become: true
+  systemd:
+    daemon_reload: true
+    name: zookeeper
+    state: restarted
+
+- name: restart kafka
+  become: true
+  systemd:
+    daemon_reload: true
+    name: kafka
+    state: restarted
+
+- name: reload zookeeper
+  become: true
+  systemd:
+    name: zookeeper
+    state: reloaded
+
+- name: reload kafka
+  become: true
+  systemd:
+    name: kafka
+    state: reloaded

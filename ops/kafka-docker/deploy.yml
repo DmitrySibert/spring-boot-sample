@@ -6,7 +6,7 @@
     kafka_broker_id: 0
     kafka_zookeeper_hosts: "192.168.1.110:2181,192.168.1.111:2181"
     kafka_adv_listener_external: "192.168.1.110"
-    kafdrop_kafka_servers: "192.168.1.110:9092,192.168.1.111:9092"
+    kafdrop_kafka_servers: "192.168.1.217:9092,192.168.1.218:9092"
     kafka_node_name: "kafka-1"
   user: "{{ user }}"
   become: true
@@ -30,7 +30,6 @@
     template:
       src: kafdrop.yml
       dest: /home/headvm/kafka/kafdrop.yml
-
 
 - hosts: stage2
   vars:

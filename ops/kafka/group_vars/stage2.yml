@@ -1,0 +1,9 @@
+kafka_broker_id: 1
+kafka_broker_host: 192.168.1.218
+kafka_zookeeper_hosts: "{{ kafka_broker_host }}:2181"
+
+install: false
+
+zookeeper_node_id: 2
+zookeeper_server_1: "server.1=192.168.1.217:2888:3888"
+zookeeper_server_2: "server.2=0.0.0.0:2888:3888"

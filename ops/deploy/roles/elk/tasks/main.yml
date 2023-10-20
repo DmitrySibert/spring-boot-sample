@@ -1,5 +1,5 @@
 - name: Install Java
-  include: common/java.yml
+  include: common/main.yml
 
 - name: Install Elastic search
   include: elk/elastic_search.yml
